@@ -1,0 +1,12 @@
+Benchmark,Max_Requests,Input_Tokens,Output_Tokens,Requests_per_Second,Request_Latency_sec,Time_to_First_Token_ms,Inter_Token_Latency_ms,Output_Token_Throughput
+synchronous,8,1000.38,333.00,0.63,1.60,197.36,4.19,208.72
+asynchronous@1.09 req/sec,8,1000.62,333.00,1.00,1.58,190.91,4.18,333.22
+asynchronous@1.56 req/sec,8,1000.00,333.00,1.32,1.59,188.17,4.20,439.32
+asynchronous@2.02 req/sec,8,1000.88,333.00,1.59,1.58,185.28,4.20,528.17
+asynchronous@2.49 req/sec,8,1000.50,333.00,1.82,1.59,190.20,4.19,606.91
+asynchronous@2.96 req/sec,8,1000.25,333.00,2.02,1.61,189.08,4.26,672.86
+asynchronous@3.42 req/sec,8,1000.38,333.00,2.20,1.61,191.48,4.26,733.19
+asynchronous@3.89 req/sec,8,1000.25,333.00,2.36,1.61,189.69,4.28,786.03
+asynchronous@4.35 req/sec,8,1000.25,333.00,2.49,1.63,194.67,4.29,829.85
+asynchronous@4.82 req/sec,8,1000.25,333.00,2.63,1.61,189.93,4.27,874.96
+throughput,8,1000.25,333.00,4.82,1.64,212.63,4.29,1604.37

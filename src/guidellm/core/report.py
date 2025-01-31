@@ -216,7 +216,7 @@ def _create_benchmark_report_dist_perf_summary(
 
 def _create_benchmark_report_summary(report: TextGenerationBenchmarkReport) -> Table:
     """
-    Create a summary table for a benchmark report.
+    Create a summary table for a benchmark report and save to CSV.
 
     :param report: The benchmark report to summarize.
     :type report: TextGenerationBenchmarkReport
@@ -225,6 +225,9 @@ def _create_benchmark_report_summary(report: TextGenerationBenchmarkReport) -> T
     """
     table = Table(
         "Benchmark",
+        "Max Requests",
+        "Input Tokens",
+        "Output Tokens",
         "Requests per Second",
         "Request Latency",
         "Time to First Token",
@@ -236,16 +239,55 @@ def _create_benchmark_report_summary(report: TextGenerationBenchmarkReport) -> T
         show_header=True,
     )
 
+    # Create CSV content
+    csv_headers = [
+        "Benchmark", 
+        "Max_Requests",
+        "Input_Tokens",
+        "Output_Tokens",
+        "Requests_per_Second", 
+        "Request_Latency_sec", 
+        "Time_to_First_Token_ms", 
+        "Inter_Token_Latency_ms", 
+        "Output_Token_Throughput"
+    ]
+    csv_rows = []
+
     for benchmark in report.benchmarks_sorted:
+        # Add row to rich table
         table.add_row(
             _benchmark_rate_id(benchmark),
+            str(benchmark.total_count),
+            f"{benchmark.prompt_token_distribution.mean:.2f}",
+            f"{benchmark.output_token_distribution.mean:.2f}",
             f"{benchmark.completed_request_rate:.2f} req/sec",
             f"{benchmark.request_latency:.2f} sec",
             f"{benchmark.time_to_first_token:.2f} ms",
             f"{benchmark.inter_token_latency:.2f} ms",
             f"{benchmark.output_token_throughput:.2f} tokens/sec",
         )
-    logger.debug("Created overall performance summary table for the report.")
+
+        # Add row to CSV data
+        csv_rows.append([
+            _benchmark_rate_id(benchmark),
+            benchmark.total_count,
+            f"{benchmark.prompt_token_distribution.mean:.2f}",
+            f"{benchmark.output_token_distribution.mean:.2f}",
+            f"{benchmark.completed_request_rate:.2f}",
+            f"{benchmark.request_latency:.2f}",
+            f"{benchmark.time_to_first_token:.2f}",
+            f"{benchmark.inter_token_latency:.2f}",
+            f"{benchmark.output_token_throughput:.2f}"
+        ])
+
+    # Write to CSV file
+    import csv
+    with open('report_summary.csv', 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(csv_headers)
+        writer.writerows(csv_rows)
+
+    logger.debug("Created overall performance summary table and CSV file for the report.")
     return table
 
 
