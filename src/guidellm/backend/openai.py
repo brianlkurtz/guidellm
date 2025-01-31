@@ -109,6 +109,7 @@ class OpenAIBackend(Backend):
                 {"role": "user", "content": request.prompt},
             ],
             stream=True,
+            extra_body={'ignore_eos': True},
             **request_args,
         )
 
